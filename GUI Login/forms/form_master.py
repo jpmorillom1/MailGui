@@ -21,7 +21,7 @@ class MasterPanel(tk.Tk):
         self.geometry(alignstr)
         self.resizable(width=False, height=False)
         # Crear el Treeview para la tabla
-        self.tabla = ttk.Treeview(self, columns=("0","remitente", "correo", "fecha"))
+        self.tabla = ttk.Treeview(self, columns=("remitente", "correo", "fecha"))
         self.tabla.heading("#0", text="Botón")
         self.tabla.heading("remitente", text="Remitente")
         self.tabla.heading("correo", text="Correo")
@@ -40,6 +40,10 @@ class MasterPanel(tk.Tk):
         scroll_y = ttk.Scrollbar(self, orient="vertical", command=self.tabla.yview)
         scroll_y.pack(side="right", fill="y")
         self.tabla.configure(yscrollcommand=scroll_y.set)
+
+        # Asociar la función ver_correo al botón
+        
+        self.tabla.bind("<ButtonRelease-1>", self.ver_correo)
         # Mostrar la tabla
         self.tabla.place(x=260, y=100, width=1020, height=620)
         
@@ -212,6 +216,14 @@ class MasterPanel(tk.Tk):
     def insertar_fila(self, remitente, correo, fecha):
         # Insertar una nueva fila en la tabla
         self.tabla.insert("", "end", values=(remitente, correo, fecha))
+
+    def ver_correo(self, event):
+        # Obtener la fila seleccionada
+        seleccion = self.tabla.selection()
+        if seleccion:
+            # Obtener el valor de la columna "correo" de la fila seleccionada
+            correo = self.tabla.item(seleccion, "values")[1]
+            print(f"Correo: {correo}")
 
 
     def BotonAddContact_command(self):
